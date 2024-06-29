@@ -1,0 +1,30 @@
+/* all navbar area */
+.navbar {
+  background-color: rgb(240, 240, 238);
+}
+
+.fa-earth-americas {
+  font-size: 30px;
+  color: #015768;
+  padding: 5px;
+  background-color: #b6e7f1;
+  border-radius: 100%;
+  padding: 8px;
+}
+
+.navbar-brand {
+  font-family: "Rowdies", sans-serif;
+  font-weight: 700;
+  padding: 8px;
+  background-color: #f8ccdc;
+  border-radius: 5px;
+  color: #a1023c !important;
+}
+
+/* main area */
+.studySearch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
