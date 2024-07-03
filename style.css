@@ -1,13 +1,21 @@
 /* all navbar area */
 .navbar {
   background-color: rgb(240, 240, 238);
+  padding: 10px;
 }
 
+.nav-item {
+  margin: 5px;
+}
+.nav-item:hover {
+  background-color: rgb(232, 231, 231);
+  border-radius: 5px;
+}
 .fa-earth-americas {
   font-size: 30px;
-  color: #015768;
+  color: #184f7a;
   padding: 5px;
-  background-color: #b6e7f1;
+  background-color: #b6d8f1;
   border-radius: 100%;
   padding: 8px;
 }
@@ -16,15 +24,30 @@
   font-family: "Rowdies", sans-serif;
   font-weight: 700;
   padding: 8px;
-  background-color: #f8ccdc;
-  border-radius: 5px;
-  color: #a1023c !important;
+}
+
+/* style.css */
+
+/* Dropdown items hover effect */
+.dropdown-menu .dropdown-item:hover {
+  background-color: #e0e0e0;
+  color: #000;
 }
 
 /* main area */
-.studySearch {
+.studySearch-container {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 30px;
+}
+.active {
+  background-color: #b6d8f1 !important ;
+  border-radius: 5px;
+}
+
+/* Study page */
+.flagImage {
+  height: 200px;
+  width: auto;
 }
