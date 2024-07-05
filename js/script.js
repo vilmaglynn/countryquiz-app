@@ -1,7 +1,11 @@
-// Get references to the input, button elements, and all other id elements
+// Get references to the input, button elements, and the stats container
 const countryInput = document.getElementById("countryInput");
 const searchbtn = document.getElementById("searchbtn");
 const countryNameDisplay = document.getElementById("countryNameDisplay");
+const countryStats = document.getElementById("countryStats");
+const flagContainer = document.getElementById("flagContainer");
+const countryFlag = document.getElementById("countryFlag");
+const countryCoat = document.getElementById("countryCoat");
 
 // Function to fetch country data by name
 function fetchCountryDataByName(country) {
@@ -21,6 +25,7 @@ function fetchCountryDataByName(country) {
     .then((data) => {
       // Log the data to the console
       console.log("Country Data:", data);
+      console.log(data[0].coatOfArms.svg);
 
       // Call the function to display the country data
       displayCountryData(data);
@@ -31,13 +36,72 @@ function fetchCountryDataByName(country) {
     });
 }
 
+// Function to create and append a paragraph element with text
+function createAndAppendParagraph(parent, label, value) {
+  const paragraph = document.createElement("p");
+  paragraph.textContent = `${label}: ${value}`;
+  parent.appendChild(paragraph);
+}
+
 // Function to display the country data
 function displayCountryData(data) {
   // Extract the common name of the country from the first element of the data array
   const countryName = data[0].name.common;
 
   // Display the country name in the h1 element
-  countryNameDisplay.innerHTML = `<img src="./images/earth-icon.svg" alt="" height="90px"> ${countryName}`;
+  countryNameDisplay.innerHTML = `<img src="./images/earth-icon.svg" alt="earth map" height="90px"> ${countryName}`;
+
+  // COUNTRY STATS
+  // Clear previous country stats
+  countryStats.innerHTML = "";
+
+  // Extract and display the capital city
+  const capitalCity = data[0].capital ? data[0].capital[0] : "N/A";
+  createAndAppendParagraph(countryStats, "Capital City", capitalCity);
+
+  // Extract and display the population
+  const population = data[0].population.toLocaleString();
+  createAndAppendParagraph(countryStats, "Population", population);
+
+  // Extract and display the languages
+  const languages = data[0].languages
+    ? Object.values(data[0].languages).join(", ")
+    : "N/A";
+  createAndAppendParagraph(countryStats, "Languages", languages);
+
+  // Extract and display the continent
+  const continent = data[0].continents ? data[0].continents[0] : "N/A";
+  createAndAppendParagraph(countryStats, "Continent", continent);
+
+  // Extract and display the sub-region
+  const subRegion = data[0].subregion || "N/A";
+  createAndAppendParagraph(countryStats, "Sub-region", subRegion);
+
+  // Extract and display the currencies
+  const currencies = data[0].currencies
+    ? Object.values(data[0].currencies)
+        .map((currency) => currency.name)
+        .join(", ")
+    : "N/A";
+  createAndAppendParagraph(countryStats, "Currencies", currencies);
+
+  // FLAG
+  // Extract and display the flag
+  const flagUrl = data[0].flags.svg;
+  const flagAlt = data[0].flags.alt;
+
+  // Update the flag image
+  countryFlag.src = flagUrl;
+  countryFlag.alt = flagAlt;
+
+  // COAT OF ARMS
+  // Extract and display the coat of arms
+  const coatUrl = data[0].coatOfArms.svg;
+  const coatAlt = `Coat of arms of ${countryName}`;
+
+  // Update the flag image
+  countryCoat.src = coatUrl;
+  countryCoat.alt = coatAlt;
 }
 
 // Add event listener to the form submission

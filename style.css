@@ -94,6 +94,7 @@
   align-content: center;
   border: 3px solid rgb(223, 222, 222);
   background-color: #ffffff;
+  padding: 10px;
 }
 
 /* Ensure images are contained within their grid item and maintain aspect ratio */
@@ -101,6 +102,7 @@
   max-width: 100%;
   height: auto;
   width: auto;
+  border: 2px solid rgb(133, 132, 132);
 }
 
 .country-image-container {
