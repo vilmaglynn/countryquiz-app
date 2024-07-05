@@ -1,14 +1,14 @@
 /* all navbar area */
 .navbar {
-  background-color: rgb(240, 240, 238);
   padding: 10px;
+  background-color: #d8edfe;
 }
 
 .nav-item {
   margin: 5px;
 }
 .nav-item:hover {
-  background-color: rgb(232, 231, 231);
+  background-color: #c1e0f9;
   border-radius: 5px;
 }
 .fa-earth-americas {
@@ -26,28 +26,118 @@
   padding: 8px;
 }
 
-/* style.css */
-
 /* Dropdown items hover effect */
 .dropdown-menu .dropdown-item:hover {
   background-color: #e0e0e0;
   color: #000;
 }
 
-/* main area */
+.active {
+  background-color: black !important ;
+  border-radius: 5px;
+  color: white !important;
+}
+
+/* Search input */
 .studySearch-container {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 30px;
 }
-.active {
-  background-color: #b6d8f1 !important ;
-  border-radius: 5px;
-}
 
 /* Study page */
-.flagImage {
-  height: 200px;
+/* General styles for the main container */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: rgb(243, 242, 242);
+  width: 80%;
+  margin: 30px auto;
+}
+
+.main-container h1 {
+  padding: 10px;
+  width: 100%;
+  border-radius: 5px;
+  font-family: "Rowdies", sans-serif;
+  font-size: 3em;
+  margin-top: 20px;
+}
+
+/* Grid container styles for larger screens */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px; /* Space between the grid items */
+  margin: 20px;
+  width: 80%;
+  margin: 30px auto;
+}
+.infoLabel {
+  border-bottom: 1px solid rgb(215, 214, 214);
+  padding: 10px;
+  width: 100%;
+  align-self: flex-start;
+}
+
+/* Individual grid items */
+.info-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  align-content: center;
+  border: 3px solid rgb(223, 222, 222);
+  background-color: #ffffff;
+}
+
+/* Ensure images are contained within their grid item and maintain aspect ratio */
+.mainImages {
+  max-width: 100%;
+  height: auto;
   width: auto;
+}
+
+.country-image-container {
+  padding: 10px;
+  width: 80%;
+  margin: 30px auto;
+  border: 3px solid rgb(223, 222, 222);
+  background-color: #ffffff;
+}
+.map-container {
+  padding: 10px;
+  width: 80%;
+  margin: 30px auto;
+  border: 3px solid rgb(223, 222, 222);
+  background-color: #ffffff;
+}
+
+#randomImage {
+  width: 80%;
+  margin: 30px;
+}
+/* Responsive styles */
+
+/* For screens less than or equal to 768px wide */
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr; /* Change to a single column layout */
+  }
+
+  .info-container {
+    margin-bottom: 20px; /* Add some space between items in the column */
+  }
+}
+
+/* For screens between 769px and 1024px wide */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr); /* Change to two columns */
+  }
 }
