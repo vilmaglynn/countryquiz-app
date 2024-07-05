@@ -6,10 +6,12 @@ export function getCountryFromGeolocation(latitude, longitude) {
   return fetch(geocodeUrl)
     .then((response) => response.json())
     .then((data) => {
-      if (data && data.countryName) {
+      if (data && data.countryCode) {
+        console.log(data);
         // Return both countryName and principalSubdivision for fallback purposes
         return {
           countryName: data.countryName,
+          countryCode: data.countryCode,
           principalSubdivision: data.principalSubdivision
         };
       } else {

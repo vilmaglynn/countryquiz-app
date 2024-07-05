@@ -1,4 +1,4 @@
-async function getRandomImage() {
+export async function getRandomImage() {
   const apiKey = "N3oH2czgVhWEs8fQtIJeRsBZlYE6jzAJcNKdev0h8cE";
   const query = "honduras";
   const url = `https://api.unsplash.com/photos/random?query=${query}&client_id=${apiKey}`;
