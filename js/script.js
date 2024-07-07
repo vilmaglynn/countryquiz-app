@@ -1,4 +1,7 @@
+//main ./js/script.js
+
 import { getCountryFromGeolocation } from "./autolocation.js";
+import { getRandomImage } from "./randomImage.js";
 
 // Get references to the input, button elements, and the stats container
 const countryInput = document.getElementById("countryInput");
@@ -88,6 +91,7 @@ function handleGeolocationSuccess(position) {
         location.countryCode ||
         location.principalSubdivision;
       fetchCountryDataByName(countryName);
+      getRandomImage(countryName);
     })
     .catch((error) => {
       console.error("Error getting country from geolocation:", error);
