@@ -1,7 +1,7 @@
-export async function getRandomImage() {
+export async function getRandomImage(country) {
   const apiKey = "N3oH2czgVhWEs8fQtIJeRsBZlYE6jzAJcNKdev0h8cE";
-  const query = "honduras";
-  const randomPage = Math.floor(Math.random() * 30) + 1; // Random page number between 1 and 100
+  const query = country;
+  const randomPage = Math.floor(Math.random() * 10) + 1; // Random page number between 1 and 100
   const url = `https://api.unsplash.com/search/photos?query=${query}&page=${randomPage}&client_id=${apiKey}`;
 
   try {
@@ -22,12 +22,11 @@ export async function getRandomImage() {
       const imageUrl = image.urls.regular;
       const alt = image.alt_description || `Image of ${query}`;
       const description =
-        image.description ||
         image.alt_description ||
+        image.description ||
         "No description available";
-      const description2 = image.tags[0].title
-        ? image.tags[1].title || image.tags[2].title
-        : "";
+      const description2 = `Tags: ${image.tags[0].title} , 
+        ${image.tags[1].title}, ${image.tags[2].title}`;
       const additionalDescription = image.user
         ? `Unsplash Photo by ${image.user.name}`
         : "Photographer information not available";

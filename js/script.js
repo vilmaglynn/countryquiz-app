@@ -26,6 +26,7 @@ function fetchCountryDataByName(country) {
     .then((data) => {
       console.log("Country Data:", data);
       displayCountryData(data);
+      getRandomImage(country);
     })
     .catch((error) => {
       console.error("Error fetching country data:", error);
@@ -86,12 +87,9 @@ function handleGeolocationSuccess(position) {
   const { latitude, longitude } = position.coords;
   getCountryFromGeolocation(latitude, longitude)
     .then((location) => {
-      const countryName =
-        location.countryCode ||
-        location.countryCode ||
-        location.principalSubdivision;
+      const countryName = location.countryCode || location.principalSubdivision;
       fetchCountryDataByName(countryName);
-      getRandomImage(countryName);
+      getRandomImage(country);
     })
     .catch((error) => {
       console.error("Error getting country from geolocation:", error);
