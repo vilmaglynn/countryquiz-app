@@ -1,5 +1,3 @@
-// js/autolocation.js
-
 export function getCountryFromGeolocation(latitude, longitude) {
   const geocodeUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`;
 
@@ -8,7 +6,6 @@ export function getCountryFromGeolocation(latitude, longitude) {
     .then((data) => {
       if (data && data.countryCode) {
         console.log(data);
-        // Return both countryName and principalSubdivision for fallback purposes
         return {
           countryName: data.countryName,
           countryCode: data.countryCode,
