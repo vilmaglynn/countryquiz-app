@@ -12,6 +12,14 @@ const flagContainer = document.getElementById("flagContainer");
 const countryFlag = document.getElementById("countryFlag");
 const countryCoat = document.getElementById("countryCoat");
 
+// Initialize the map with a world view
+const map = L.map("map").setView([20, 0], 2); // Default to a world view
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
 // Function to fetch country data by name
 function fetchCountryDataByName(country) {
   const url = `https://restcountries.com/v3.1/name/${country}`;
@@ -27,6 +35,10 @@ function fetchCountryDataByName(country) {
       console.log("Country Data:", data);
       displayCountryData(data);
       getRandomImage(country);
+
+      // Update map view
+      const latlng = [data[0].latlng[0], data[0].latlng[1]];
+      map.setView(latlng, 5);
     })
     .catch((error) => {
       console.error("Error fetching country data:", error);
