@@ -15,7 +15,6 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
 </head>
 
 <body>
@@ -50,6 +49,7 @@
 	</nav>
 
 	<!-- Search container -->
+
 	<div class="studySearch-container container ">
 		<!-- Form with input and button aligned horizontally -->
 		<form role="search" class="d-flex" id="searchForm">
@@ -57,20 +57,26 @@
 			<input class="form-control countryInput" id="countryInput" type="search" placeholder="Search by country.."
 				aria-label="Search">
 			<!-- Search button -->
-			<button class="btn btn-dark" id="searchbtn" type="submit"><i
+			<button class="btn btn-dark" id="searchbtn" type="button"><i
 					class="fa-solid fa-magnifying-glass"></i></button>
+			<!-- Dropdown container for country options -->
+			<ul id="countryDropdown" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+				<!-- Dropdown items will be dynamically added here -->
+			</ul>
 		</form>
 	</div>
 
+
 	<!-- Country study main area-->
 	<div class="main-container ">
-		<h1 id="countryNameDisplay"> <img src="./images/earth-icon.svg" alt="" height="90px">Country</h1>
+		<h1 id="countryNameDisplay"> <img src="./images/earth-icon.svg" alt="" height="90px"> Country</h1>
 
 		<div class="grid-container">
 			<div class="info-container">
 				<h2 class="infoLabel">Country Stats</h2>
 				<div id="countryStats">
-					<!-- <p>Capital City: Tegucigalpa</p>
+					<!-- Country stats will be displayed here -->
+					<!-- <p>Capital City: ${Capital}</p>
 					<p>Population: </p>
 					<p>Languages:</p>
 					<p>Continent:</p>
@@ -79,30 +85,28 @@
 				</div>
 			</div>
 
-
-			<!-- Add an id to the flag container for easier selection -->
-
 			<div id="flagContainer" class="info-container">
 				<h2 class="infoLabel">Flag</h2>
 				<img id="countryFlag" class="mainImages" alt="Country Flag">
-				<!-- src="https://flagcdn.com/hn.svg" alt="Honduras Flag" -->
 			</div>
-
-
 
 			<div class="info-container">
 				<h2 class="infoLabel">Coat of arms</h2>
 				<img id="countryCoat" class="mainImages" alt=" Coat of arms">
 			</div>
 		</div>
+
 		<!-- Random Image Section -->
 		<div class="country-image-container">
 			<h2 class="infoLabel">Random Country Image</h2>
 			<button class="btn btn-primary mb-3" onclick="getRandomImage()">Get Random Image</button>
 			<img id="randomImage" alt="Random Country" />
-			<p id="randomImageDescription"></p>
-			<p id="randomImageDescription2"></p>
-			<p id="randomImageAdditionalDescription"></p>
+			<div id="randomImageInfo">
+				<p id="randomImageDescription"></p>
+				<p id="randomImageTags"></p>
+				<p id="randomImageUser"></p>
+
+			</div>
 		</div>
 
 		<!-- Map container -->
@@ -111,18 +115,12 @@
 			<div id="map"></div>
 		</div>
 
-
-	</div>
-
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-		crossorigin="anonymous"></script>
-	<script type="module" src="./js/script.js"></script>
-	<script src="js/autolocation.js" type="module"></script>
-	<script src="js/randomImage.js" type="module"></script>
-	<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+			crossorigin="anonymous"></script>
+		<script type="module" src="./js/script.js"></script>
+		<script src="js/randomImage.js" type="module"></script>
+		<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </body>
 
 </html>

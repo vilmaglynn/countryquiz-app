@@ -1,30 +1,102 @@
-//main ./js/script.js
+const apiKey = "N3oH2czgVhWEs8fQtIJeRsBZlYE6jzAJcNKdev0h8cE";
+let mymap; // Declare map variable globally
 
-import { getCountryFromGeolocation } from "./autolocation.js";
-import { getRandomImage } from "./randomImage.js";
+document.addEventListener("DOMContentLoaded", () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
 
-// Get references to the input, button elements, and the stats container
-const countryInput = document.getElementById("countryInput");
-const searchbtn = document.getElementById("searchbtn");
-const countryNameDisplay = document.getElementById("countryNameDisplay");
-const countryStats = document.getElementById("countryStats");
-const flagContainer = document.getElementById("flagContainer");
-const countryFlag = document.getElementById("countryFlag");
-const countryCoat = document.getElementById("countryCoat");
+        console.log("Latitude: " + latitude);
+        console.log("Longitude: " + longitude);
 
-// Initialize the map with a world view
-const map = L.map("map").setView([20, 0], 2); // Default to a world view
+        // Call getCountryName function
+        getCountryName(latitude, longitude)
+          .then((countryName) => {
+            console.log("Country Name: " + countryName);
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+            // Call fetchCountryDataByName function
+            return fetchCountryDataByName(countryName);
+          })
+          .then((countryData) => {
+            console.log("Country Data:", countryData);
+            // Display country data
+            displayCountryData(countryData);
 
-// Function to fetch country data by name
+            // Display map with current location
+            displayMap(latitude, longitude, countryData.name.common);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      },
+      function (error) {
+        console.error("Error Code = " + error.code + " - " + error.message);
+      }
+    );
+  } else {
+    console.error("Geolocation is not supported by this browser.");
+  }
+
+  // Add event listener to the search button
+  document.getElementById("searchbtn").addEventListener("click", () => {
+    const countryInput = document.getElementById("countryInput").value;
+    if (countryInput) {
+      fetchCountryDataByName(countryInput)
+        .then((countryData) => {
+          console.log("Country Data:", countryData);
+          // Display country data
+          displayCountryData(countryData);
+
+          // Geocode the country name to get coordinates
+          geocodeCountryName(countryData.name.common)
+            .then(({ latitude, longitude }) => {
+              // Display map with the searched country location
+              displayMap(latitude, longitude, countryData.name.common);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  });
+
+  // Add event listener to the random image button
+  document
+    .getElementById("randomImageBtn")
+    .addEventListener("click", getRandomImage);
+});
+
+function getCountryName(latitude, longitude) {
+  return new Promise((resolve, reject) => {
+    fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.countryCode) {
+          resolve(data.countryCode);
+        } else if (data.countryName) {
+          resolve(data.countryName);
+        } else {
+          reject("Country not found.");
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 function fetchCountryDataByName(country) {
   const url = `https://restcountries.com/v3.1/name/${country}`;
 
-  fetch(url)
+  return fetch(url)
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -32,107 +104,167 @@ function fetchCountryDataByName(country) {
       return response.json();
     })
     .then((data) => {
-      console.log("Country Data:", data);
-      displayCountryData(data);
-      getRandomImage(country);
-
-      // Update map view
-      const latlng = [data[0].latlng[0], data[0].latlng[1]];
-      map.setView(latlng, 5);
-    })
-    .catch((error) => {
-      console.error("Error fetching country data:", error);
+      if (data.length > 0) {
+        return data[0]; // Return the first result (assuming exact match)
+      } else {
+        throw new Error(`Country '${country}' not found.`);
+      }
     });
 }
 
-// Function to create and append a paragraph element with styled label text
-function createAndAppendParagraph(parent, label, value) {
-  const paragraph = document.createElement("p");
-  paragraph.innerHTML = `<span class="countryStatsLabel">${label}:</span> ${value}`;
-  parent.appendChild(paragraph);
+function fetchRandomImage(country, page = 1) {
+  const perPage = 30; // Number of results per page
+  const url = `https://api.unsplash.com/search/photos?query=${country}&client_id=${apiKey}&per_page=${perPage}&page=${page}`;
+
+  return fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      if (data.results.length > 0) {
+        const randomIndex = Math.floor(Math.random() * data.results.length);
+        return data.results[randomIndex];
+      } else {
+        throw new Error(`No images found for '${country}' on Unsplash.`);
+      }
+    });
 }
 
-// Function to display the country data
-function displayCountryData(data) {
-  const countryName = data[0].name.common;
+function displayCountryData(countryData) {
+  const countryNameDisplay = document.getElementById("countryNameDisplay");
+  const countryStats = document.getElementById("countryStats");
+  const countryFlag = document.getElementById("countryFlag");
+  const countryCoat = document.getElementById("countryCoat");
+
+  const countryName = countryData.name.common;
   countryNameDisplay.innerHTML = `<img src="./images/earth-icon.svg" alt="earth map" height="90px"> ${countryName}`;
 
+  // Clear previous data
   countryStats.innerHTML = "";
 
-  const capitalCity = data[0].capital ? data[0].capital[0] : "N/A";
-  createAndAppendParagraph(countryStats, "Capital City", capitalCity);
+  // Display country stats
+  countryStats.innerHTML += `<p>Capital City: ${
+    countryData.capital ? countryData.capital[0] : "N/A"
+  }</p>`;
+  countryStats.innerHTML += `<p>Population: ${countryData.population.toLocaleString()}</p>`;
+  countryStats.innerHTML += `<p>Languages: ${Object.values(
+    countryData.languages
+  ).join(", ")}</p>`;
+  countryStats.innerHTML += `<p>Continent: ${countryData.continents[0]}</p>`;
+  countryStats.innerHTML += `<p>Sub-region: ${countryData.subregion}</p>`;
+  countryStats.innerHTML += `<p>Currencies: ${Object.values(
+    countryData.currencies
+  )
+    .map((currency) => currency.name)
+    .join(", ")}</p>`;
 
-  const population = data[0].population.toLocaleString();
-  createAndAppendParagraph(countryStats, "Population", population);
+  // Display flag
+  countryFlag.src = countryData.flags.png;
+  countryFlag.alt = `${countryData.name.common} Flag`;
 
-  const languages = data[0].languages
-    ? Object.values(data[0].languages).join(", ")
-    : "N/A";
-  createAndAppendParagraph(countryStats, "Languages", languages);
+  // Display coat of arms
+  countryCoat.src = countryData.coatOfArms.png;
+  countryCoat.alt = `${countryData.name.common} Coat of Arms`;
 
-  const continent = data[0].continents ? data[0].continents[0] : "N/A";
-  createAndAppendParagraph(countryStats, "Continent", continent);
+  // Fetch and display random image from a random page
+  const randomPage = Math.floor(Math.random() * 10) + 1; // Randomly choose a page between 1 and 10
+  fetchRandomImage(countryName, randomPage)
+    .then((image) => {
+      console.log(image);
+      const randomImage = document.getElementById("randomImage");
+      const randomImageDescription = document.getElementById(
+        "randomImageDescription"
+      );
+      const randomImageTags = document.getElementById("randomImageTags");
+      const randomImageUser = document.getElementById("randomImageUser");
 
-  const subRegion = data[0].subregion || "N/A";
-  createAndAppendParagraph(countryStats, "Sub-region", subRegion);
+      randomImage.src = image.urls.regular;
+      randomImage.alt =
+        `Description: ${image.alt_description} ` || `${countryName} image`;
+      randomImageDescription.innerHTML = `<strong>Description:</strong> ${
+        image.description ||
+        image.alt_description ||
+        "No description available."
+      }`;
+      randomImageTags.innerHTML = `<strong>Tags:</strong> ${image.tags
+        .map((tag) => tag.title)
+        .join(", ")}`;
 
-  const currencies = data[0].currencies
-    ? Object.values(data[0].currencies)
-        .map((currency) => currency.name)
-        .join(", ")
-    : "N/A";
-  createAndAppendParagraph(countryStats, "Currencies", currencies);
-
-  const flagUrl = data[0].flags.svg;
-  const flagAlt = data[0].flags.alt;
-  countryFlag.src = flagUrl;
-  countryFlag.alt = flagAlt;
-
-  const coatUrl = data[0].coatOfArms.svg;
-  const coatAlt = `Coat of arms of ${countryName}`;
-  countryCoat.src = coatUrl;
-  countryCoat.alt = coatAlt;
-}
-
-// Function to handle geolocation success
-function handleGeolocationSuccess(position) {
-  const { latitude, longitude } = position.coords;
-  getCountryFromGeolocation(latitude, longitude)
-    .then((location) => {
-      const countryName = location.countryCode || location.principalSubdivision;
-      fetchCountryDataByName(countryName);
-      getRandomImage(country);
+      randomImageUser.innerHTML = `<strong>Unsplash Photographer:</strong> ${image.user.name}`;
     })
     .catch((error) => {
-      console.error("Error getting country from geolocation:", error);
+      console.error("Error fetching random image:", error);
     });
 }
 
-// Function to handle geolocation error
-function handleGeolocationError(error) {
-  console.error("Error getting geolocation:", error);
+function displayMap(latitude, longitude, countryName) {
+  const mapElement = document.getElementById("map");
+
+  // Initialize map or set view if map already exists
+  if (!mymap) {
+    mymap = L.map(mapElement).setView([latitude, longitude], 5);
+  } else {
+    mymap.setView([latitude, longitude], 5);
+  }
+
+  // Add OpenStreetMap tiles to the map
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(mymap);
+
+  // Add a marker to the map at the current location
+  const marker = L.marker([latitude, longitude]).addTo(mymap);
+  marker.bindPopup(`${countryName} is here!`).openPopup();
 }
 
-// Add event listener for page load to get user's geolocation
-document.addEventListener("DOMContentLoaded", () => {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      handleGeolocationSuccess,
-      handleGeolocationError
-    );
-  } else {
-    console.warn("Geolocation is not supported by this browser.");
-  }
-});
+function geocodeCountryName(countryName) {
+  const url = `https://nominatim.openstreetmap.org/search?q=${countryName}&format=json&limit=1`;
 
-// Add event listener to the form submission for manual country search
-const searchForm = document.getElementById("searchForm");
-searchForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const countryName = countryInput.value.trim();
-  if (countryName) {
-    fetchCountryDataByName(countryName);
-  } else {
-    console.warn("Please enter a country name.");
+  return fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.length > 0) {
+        const { lat, lon } = data[0];
+        return { latitude: parseFloat(lat), longitude: parseFloat(lon) };
+      } else {
+        throw new Error(`Geocoding failed for '${countryName}'.`);
+      }
+    });
+}
+
+function getRandomImage() {
+  const countryInput = document.getElementById("countryInput").value;
+  if (countryInput) {
+    fetchCountryDataByName(countryInput)
+      .then((countryData) => {
+        const randomPage = Math.floor(Math.random() * 10) + 1;
+        return fetchRandomImage(countryData.name.common, randomPage);
+      })
+      .then((image) => {
+        console.log(image);
+        const randomImage = document.getElementById("randomImage");
+        const randomImageDescription = document.getElementById(
+          "randomImageDescription"
+        );
+        const randomImageTags = document.getElementById("randomImageTags");
+        const randomImageUser = document.getElementById("randomImageUser");
+
+        randomImage.src = image.urls.regular;
+        randomImage.alt =
+          `Description: ${image.alt_description} ` || `${countryInput} image`;
+        randomImageDescription.innerHTML = `<strong>Description:</strong> ${
+          image.description ||
+          image.alt_description ||
+          "No description available."
+        }`;
+        randomImageTags.innerHTML = `<strong>Tags:</strong> ${image.tags
+          .map((tag) => tag.title)
+          .join(", ")}`;
+
+        randomImageUser.innerHTML = `<strong>Unsplash Photographer:</strong> ${image.user.name}`;
+      })
+      .catch((error) => {
+        console.error("Error fetching random image:", error);
+      });
   }
-});
+}
