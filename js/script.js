@@ -1,7 +1,7 @@
-const apiKey = "N3oH2czgVhWEs8fQtIJeRsBZlYE6jzAJcNKdev0h8cE";
-let mymap; // Declare map variable globally
-
 document.addEventListener("DOMContentLoaded", () => {
+  const apiKey = "N3oH2czgVhWEs8fQtIJeRsBZlYE6jzAJcNKdev0h8cE";
+  let mymap; // Declare map variable globally
+
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       function (position) {
@@ -69,177 +69,104 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("randomImageBtn")
     .addEventListener("click", getRandomImage);
-});
 
-function getCountryName(latitude, longitude) {
-  return new Promise((resolve, reject) => {
-    fetch(
-      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
-    )
+  function getCountryName(latitude, longitude) {
+    return new Promise((resolve, reject) => {
+      fetch(
+        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data.countryCode) {
+            resolve(data.countryCode);
+          } else if (data.countryName) {
+            resolve(data.countryName);
+          } else {
+            reject("Country not found.");
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  function fetchCountryDataByName(country) {
+    const url = `https://restcountries.com/v3.1/name/${country}`;
+
+    return fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.length > 0) {
+          return data[0]; // Return the first result (assuming exact match)
+        } else {
+          throw new Error(`Country '${country}' not found.`);
+        }
+      });
+  }
+
+  function fetchRandomImage(country, page = 1) {
+    const perPage = 30; // Number of results per page
+    const url = `https://api.unsplash.com/search/photos?query=${country}&client_id=${apiKey}&per_page=${perPage}&page=${page}`;
+
+    return fetch(url)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        if (data.countryCode) {
-          resolve(data.countryCode);
-        } else if (data.countryName) {
-          resolve(data.countryName);
+        if (data.results.length > 0) {
+          const randomIndex = Math.floor(Math.random() * data.results.length);
+          return data.results[randomIndex];
         } else {
-          reject("Country not found.");
+          throw new Error(`No images found for '${country}' on Unsplash.`);
         }
-      })
-      .catch((error) => {
-        reject(error);
       });
-  });
-}
-
-function fetchCountryDataByName(country) {
-  const url = `https://restcountries.com/v3.1/name/${country}`;
-
-  return fetch(url)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      if (data.length > 0) {
-        return data[0]; // Return the first result (assuming exact match)
-      } else {
-        throw new Error(`Country '${country}' not found.`);
-      }
-    });
-}
-
-function fetchRandomImage(country, page = 1) {
-  const perPage = 30; // Number of results per page
-  const url = `https://api.unsplash.com/search/photos?query=${country}&client_id=${apiKey}&per_page=${perPage}&page=${page}`;
-
-  return fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      if (data.results.length > 0) {
-        const randomIndex = Math.floor(Math.random() * data.results.length);
-        return data.results[randomIndex];
-      } else {
-        throw new Error(`No images found for '${country}' on Unsplash.`);
-      }
-    });
-}
-
-function displayCountryData(countryData) {
-  const countryNameDisplay = document.getElementById("countryNameDisplay");
-  const countryStats = document.getElementById("countryStats");
-  const countryFlag = document.getElementById("countryFlag");
-  const countryCoat = document.getElementById("countryCoat");
-
-  const countryName = countryData.name.common;
-  countryNameDisplay.innerHTML = `<img src="./images/earth-icon.svg" alt="earth map" height="90px"> ${countryName}`;
-
-  // Clear previous data
-  countryStats.innerHTML = "";
-
-  // Display country stats
-  countryStats.innerHTML += `<p>Capital City: ${
-    countryData.capital ? countryData.capital[0] : "N/A"
-  }</p>`;
-  countryStats.innerHTML += `<p>Population: ${countryData.population.toLocaleString()}</p>`;
-  countryStats.innerHTML += `<p>Languages: ${Object.values(
-    countryData.languages
-  ).join(", ")}</p>`;
-  countryStats.innerHTML += `<p>Continent: ${countryData.continents[0]}</p>`;
-  countryStats.innerHTML += `<p>Sub-region: ${countryData.subregion}</p>`;
-  countryStats.innerHTML += `<p>Currencies: ${Object.values(
-    countryData.currencies
-  )
-    .map((currency) => currency.name)
-    .join(", ")}</p>`;
-
-  // Display flag
-  countryFlag.src = countryData.flags.png;
-  countryFlag.alt = `${countryData.name.common} Flag`;
-
-  // Display coat of arms
-  countryCoat.src = countryData.coatOfArms.png;
-  countryCoat.alt = `${countryData.name.common} Coat of Arms`;
-
-  // Fetch and display random image from a random page
-  const randomPage = Math.floor(Math.random() * 10) + 1; // Randomly choose a page between 1 and 10
-  fetchRandomImage(countryName, randomPage)
-    .then((image) => {
-      console.log(image);
-      const randomImage = document.getElementById("randomImage");
-      const randomImageDescription = document.getElementById(
-        "randomImageDescription"
-      );
-      const randomImageTags = document.getElementById("randomImageTags");
-      const randomImageUser = document.getElementById("randomImageUser");
-
-      randomImage.src = image.urls.regular;
-      randomImage.alt =
-        `Description: ${image.alt_description} ` || `${countryName} image`;
-      randomImageDescription.innerHTML = `<strong>Description:</strong> ${
-        image.description ||
-        image.alt_description ||
-        "No description available."
-      }`;
-      randomImageTags.innerHTML = `<strong>Tags:</strong> ${image.tags
-        .map((tag) => tag.title)
-        .join(", ")}`;
-
-      randomImageUser.innerHTML = `<strong>Unsplash Photographer:</strong> ${image.user.name}`;
-    })
-    .catch((error) => {
-      console.error("Error fetching random image:", error);
-    });
-}
-
-function displayMap(latitude, longitude, countryName) {
-  const mapElement = document.getElementById("map");
-
-  // Initialize map or set view if map already exists
-  if (!mymap) {
-    mymap = L.map(mapElement).setView([latitude, longitude], 5);
-  } else {
-    mymap.setView([latitude, longitude], 5);
   }
 
-  // Add OpenStreetMap tiles to the map
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(mymap);
+  function displayCountryData(countryData) {
+    const countryNameDisplay = document.getElementById("countryNameDisplay");
+    const countryStats = document.getElementById("countryStats");
+    const countryFlag = document.getElementById("countryFlag");
+    const countryCoat = document.getElementById("countryCoat");
 
-  // Add a marker to the map at the current location
-  const marker = L.marker([latitude, longitude]).addTo(mymap);
-  marker.bindPopup(`${countryName} is here!`).openPopup();
-}
+    const countryName = countryData.name.common;
+    countryNameDisplay.innerHTML = `<img src="./images/earth-icon.svg" alt="earth map" height="90px"> ${countryName}`;
 
-function geocodeCountryName(countryName) {
-  const url = `https://nominatim.openstreetmap.org/search?q=${countryName}&format=json&limit=1`;
+    // Clear previous data
+    countryStats.innerHTML = "";
 
-  return fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.length > 0) {
-        const { lat, lon } = data[0];
-        return { latitude: parseFloat(lat), longitude: parseFloat(lon) };
-      } else {
-        throw new Error(`Geocoding failed for '${countryName}'.`);
-      }
-    });
-}
+    // Display country stats
+    countryStats.innerHTML += `<p>Capital City: ${
+      countryData.capital ? countryData.capital[0] : "N/A"
+    }</p>`;
+    countryStats.innerHTML += `<p>Population: ${countryData.population.toLocaleString()}</p>`;
+    countryStats.innerHTML += `<p>Languages: ${Object.values(
+      countryData.languages
+    ).join(", ")}</p>`;
+    countryStats.innerHTML += `<p>Continent: ${countryData.continents[0]}</p>`;
+    countryStats.innerHTML += `<p>Sub-region: ${countryData.subregion}</p>`;
+    countryStats.innerHTML += `<p>Currencies: ${Object.values(
+      countryData.currencies
+    )
+      .map((currency) => currency.name)
+      .join(", ")}</p>`;
 
-function getRandomImage() {
-  const countryInput = document.getElementById("countryInput").value;
-  if (countryInput) {
-    fetchCountryDataByName(countryInput)
-      .then((countryData) => {
-        const randomPage = Math.floor(Math.random() * 10) + 1;
-        return fetchRandomImage(countryData.name.common, randomPage);
-      })
+    // Display flag
+    countryFlag.src = countryData.flags.png;
+    countryFlag.alt = `${countryData.name.common} Flag`;
+
+    // Display coat of arms
+    countryCoat.src = countryData.coatOfArms.png;
+    countryCoat.alt = `${countryData.name.common} Coat of Arms`;
+
+    // Fetch and display random image from a random page
+    const randomPage = Math.floor(Math.random() * 10) + 1; // Randomly choose a page between 1 and 10
+    fetchRandomImage(countryName, randomPage)
       .then((image) => {
         console.log(image);
         const randomImage = document.getElementById("randomImage");
@@ -251,7 +178,7 @@ function getRandomImage() {
 
         randomImage.src = image.urls.regular;
         randomImage.alt =
-          `Description: ${image.alt_description} ` || `${countryInput} image`;
+          `Description: ${image.alt_description} ` || `${countryName} image`;
         randomImageDescription.innerHTML = `<strong>Description:</strong> ${
           image.description ||
           image.alt_description ||
@@ -267,4 +194,77 @@ function getRandomImage() {
         console.error("Error fetching random image:", error);
       });
   }
-}
+
+  function displayMap(latitude, longitude, countryName) {
+    const mapElement = document.getElementById("map");
+
+    // Initialize map or set view if map already exists
+    if (!mymap) {
+      mymap = L.map(mapElement).setView([latitude, longitude], 5);
+    } else {
+      mymap.setView([latitude, longitude], 5);
+    }
+
+    // Add OpenStreetMap tiles to the map
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(mymap);
+
+    // Add a marker to the map at the current location
+    const marker = L.marker([latitude, longitude]).addTo(mymap);
+    marker.bindPopup(`${countryName} is here!`).openPopup();
+  }
+
+  function geocodeCountryName(countryName) {
+    const url = `https://nominatim.openstreetmap.org/search?q=${countryName}&format=json&limit=1`;
+
+    return fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.length > 0) {
+          const { lat, lon } = data[0];
+          return { latitude: parseFloat(lat), longitude: parseFloat(lon) };
+        } else {
+          throw new Error(`Geocoding failed for '${countryName}'.`);
+        }
+      });
+  }
+
+  function getRandomImage() {
+    const countryInput = document.getElementById("countryInput").value;
+    if (countryInput) {
+      fetchCountryDataByName(countryInput)
+        .then((countryData) => {
+          const randomPage = Math.floor(Math.random() * 10) + 1;
+          return fetchRandomImage(countryData.name.common, randomPage);
+        })
+        .then((image) => {
+          console.log(image);
+          const randomImage = document.getElementById("randomImage");
+          const randomImageDescription = document.getElementById(
+            "randomImageDescription"
+          );
+          const randomImageTags = document.getElementById("randomImageTags");
+          const randomImageUser = document.getElementById("randomImageUser");
+
+          randomImage.src = image.urls.regular;
+          randomImage.alt =
+            `Description: ${image.alt_description} ` || `${countryInput} image`;
+          randomImageDescription.innerHTML = `<strong>Description:</strong> ${
+            image.description ||
+            image.alt_description ||
+            "No description available."
+          }`;
+          randomImageTags.innerHTML = `<strong>Tags:</strong> ${image.tags
+            .map((tag) => tag.title)
+            .join(", ")}`;
+
+          randomImageUser.innerHTML = `<strong>Unsplash Photographer:</strong> ${image.user.name}`;
+        })
+        .catch((error) => {
+          console.error("Error fetching random image:", error);
+        });
+    }
+  }
+});
