@@ -1,6 +1,8 @@
+let detectedCountryName = "";
+
 document.addEventListener("DOMContentLoaded", () => {
   const apiKey = "N3oH2czgVhWEs8fQtIJeRsBZlYE6jzAJcNKdev0h8cE";
-  let mymap; // Declare map variable globally
+  let mymap;
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -26,6 +28,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Display map with current location
             displayMap(latitude, longitude, countryData.name.common);
+
+            // Fetch and display random image
+            getRandomImage(countryData.name.common)
+              .then((image) => {
+                displayRandomImage(image);
+                detectedCountryName = countryData.name.common;
+              })
+              .catch((error) => {
+                console.error("Error fetching random image:", error);
+              });
           })
           .catch((error) => {
             console.error("Error:", error);
@@ -54,6 +66,15 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(({ latitude, longitude }) => {
               // Display map with the searched country location
               displayMap(latitude, longitude, countryData.name.common);
+
+              // Fetch and display random image
+              getRandomImage(countryData.name.common)
+                .then((image) => {
+                  displayRandomImage(image);
+                })
+                .catch((error) => {
+                  console.error("Error fetching random image:", error);
+                });
             })
             .catch((error) => {
               console.error("Error:", error);
@@ -66,9 +87,29 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Add event listener to the random image button
-  document
-    .getElementById("randomImageBtn")
-    .addEventListener("click", getRandomImage);
+  const randomImageBtn = document.getElementById("randomImageBtn");
+  randomImageBtn.addEventListener("click", () => {
+    const countryInput = document.getElementById("countryInput").value;
+    const countryNameToUse = countryInput || detectedCountryName; // Use input or stored country name
+
+    if (countryNameToUse) {
+      getRandomImage(countryNameToUse)
+        .then((image) => {
+          displayRandomImage(image);
+        })
+        .catch((error) => {
+          console.error("Error fetching random image:", error);
+        });
+    } else {
+      console.error(
+        "No country input provided and no detected country name available."
+      );
+      // Optionally, you could display a message to the user
+      alert(
+        "Please enter a country name or allow geolocation to detect your country."
+      );
+    }
+  });
 
   function getCountryName(latitude, longitude) {
     return new Promise((resolve, reject) => {
@@ -111,9 +152,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
-  function fetchRandomImage(country, page = 1) {
+  function getRandomImage(country) {
     const perPage = 30; // Number of results per page
-    const url = `https://api.unsplash.com/search/photos?query=${country}&client_id=${apiKey}&per_page=${perPage}&page=${page}`;
+    const url = `https://api.unsplash.com/search/photos?query=${country}&client_id=${apiKey}&per_page=${perPage}&page=1`;
 
     return fetch(url)
       .then((response) => response.json())
@@ -163,36 +204,28 @@ document.addEventListener("DOMContentLoaded", () => {
     // Display coat of arms
     countryCoat.src = countryData.coatOfArms.png;
     countryCoat.alt = `${countryData.name.common} Coat of Arms`;
+  }
 
-    // Fetch and display random image from a random page
-    const randomPage = Math.floor(Math.random() * 10) + 1; // Randomly choose a page between 1 and 10
-    fetchRandomImage(countryName, randomPage)
-      .then((image) => {
-        console.log(image);
-        const randomImage = document.getElementById("randomImage");
-        const randomImageDescription = document.getElementById(
-          "randomImageDescription"
-        );
-        const randomImageTags = document.getElementById("randomImageTags");
-        const randomImageUser = document.getElementById("randomImageUser");
+  function displayRandomImage(image) {
+    console.log(image);
+    const randomImage = document.getElementById("randomImage");
+    const randomImageDescription = document.getElementById(
+      "randomImageDescription"
+    );
+    const randomImageTags = document.getElementById("randomImageTags");
+    const randomImageUser = document.getElementById("randomImageUser");
 
-        randomImage.src = image.urls.regular;
-        randomImage.alt =
-          `Description: ${image.alt_description} ` || `${countryName} image`;
-        randomImageDescription.innerHTML = `<strong>Description:</strong> ${
-          image.description ||
-          image.alt_description ||
-          "No description available."
-        }`;
-        randomImageTags.innerHTML = `<strong>Tags:</strong> ${image.tags
-          .map((tag) => tag.title)
-          .join(", ")}`;
-
-        randomImageUser.innerHTML = `<strong>Unsplash Photographer:</strong> ${image.user.name}`;
-      })
-      .catch((error) => {
-        console.error("Error fetching random image:", error);
-      });
+    randomImage.src = image.urls.regular;
+    randomImage.alt = `Description: ${
+      image.alt_description || "No description available."
+    }`;
+    randomImageDescription.innerHTML = `<strong>Description:</strong> ${
+      image.description || image.alt_description || "No description available."
+    }`;
+    randomImageTags.innerHTML = `<strong>Tags:</strong> ${image.tags
+      .map((tag) => tag.title)
+      .join(", ")}`;
+    randomImageUser.innerHTML = `<strong>Unsplash Photographer:</strong> ${image.user.name}`;
   }
 
   function displayMap(latitude, longitude, countryName) {
@@ -229,42 +262,5 @@ document.addEventListener("DOMContentLoaded", () => {
           throw new Error(`Geocoding failed for '${countryName}'.`);
         }
       });
-  }
-
-  function getRandomImage() {
-    const countryInput = document.getElementById("countryInput").value;
-    if (countryInput) {
-      fetchCountryDataByName(countryInput)
-        .then((countryData) => {
-          const randomPage = Math.floor(Math.random() * 10) + 1;
-          return fetchRandomImage(countryData.name.common, randomPage);
-        })
-        .then((image) => {
-          console.log(image);
-          const randomImage = document.getElementById("randomImage");
-          const randomImageDescription = document.getElementById(
-            "randomImageDescription"
-          );
-          const randomImageTags = document.getElementById("randomImageTags");
-          const randomImageUser = document.getElementById("randomImageUser");
-
-          randomImage.src = image.urls.regular;
-          randomImage.alt =
-            `Description: ${image.alt_description} ` || `${countryInput} image`;
-          randomImageDescription.innerHTML = `<strong>Description:</strong> ${
-            image.description ||
-            image.alt_description ||
-            "No description available."
-          }`;
-          randomImageTags.innerHTML = `<strong>Tags:</strong> ${image.tags
-            .map((tag) => tag.title)
-            .join(", ")}`;
-
-          randomImageUser.innerHTML = `<strong>Unsplash Photographer:</strong> ${image.user.name}`;
-        })
-        .catch((error) => {
-          console.error("Error fetching random image:", error);
-        });
-    }
   }
 });
