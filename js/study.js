@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return fetchCountryDataByName(countryName);
           })
           .then((countryData) => {
-            console.log("Country Data:", countryData);
             // Display country data
             displayCountryData(countryData);
 
@@ -57,7 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (countryInput) {
       fetchCountryDataByName(countryInput)
         .then((countryData) => {
-          console.log("Country Data:", countryData);
           // Display country data
           displayCountryData(countryData);
 
@@ -144,6 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return response.json();
       })
       .then((data) => {
+        console.log(data);
         if (data.length > 0) {
           return data[0]; // Return the first result (assuming exact match)
         } else {
