@@ -44,6 +44,7 @@
   justify-content: center;
   align-items: center;
   margin-top: 30px;
+  position: relative;
 }
 
 /* Study page */
@@ -134,6 +135,35 @@
   width: 80%;
   margin: 30px;
 }
+
+/* Dropdown menu */
+#countryDropdown {
+  width: 100%; /* Remove fixed width for better centering */
+  min-width: 300px; /* Ensure minimum width */
+  max-width: 500px; /* Maximum width */
+  position: absolute;
+  top: 100%;
+  left: 50%; /* Start positioning from the center */
+  transform: translateX(-50%); /* Center horizontally */
+  z-index: 1000;
+  display: none; /* Initially hidden */
+  background-color: white;
+  border: 1px solid #b9b8b8;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-height: 100px;
+  overflow-y: auto; /* Scroll if too many items */
+}
+
+.dropdown-item {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+
 /* Responsive styles */
 
 /* For screens less than or equal to 768px wide */
