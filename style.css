@@ -45,6 +45,7 @@
   align-items: center;
   margin-top: 30px;
   position: relative;
+  flex-direction: column;
 }
 
 /* Study page */
@@ -162,6 +163,18 @@
 
 .dropdown-item:hover {
   background-color: #f1f1f1;
+}
+
+.message {
+  display: none;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #f8f8f8;
+  color: #333;
+}
+.message.error {
+  background-color: #fbf2f2;
+  color: #f44336;
 }
 
 /* Responsive styles */

@@ -37,21 +37,32 @@ document.addEventListener("DOMContentLoaded", () => {
             displayRandomImage(image);
           })
           .catch((error) => {
+            showError(error.message);
             console.error("Error:", error);
           });
       },
       function (error) {
+        showError(`Error Code = ${error.code} - ${error.message}`);
         console.error("Error Code = " + error.code + " - " + error.message);
       }
     );
   } else {
+    showError("Geolocation is not supported by this browser.");
     console.error("Geolocation is not supported by this browser.");
   }
 
+  const countryInput = document.getElementById("countryInput");
+
+  countryInput.addEventListener("input", () => {
+    clearMessage(); // Clear error message when input changes
+    if (countryInput.value === "") {
+      countryDropdown.style.display = "none";
+    }
+  });
+
   document.getElementById("searchbtn").addEventListener("click", () => {
-    const countryInput = document.getElementById("countryInput").value;
-    if (countryInput) {
-      fetchCountryDataByName(countryInput)
+    if (countryInput.value) {
+      fetchCountryDataByName(countryInput.value)
         .then((countryData) => {
           if (countryData.length > 1) {
             displayCountryOptions(countryData);
@@ -69,6 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   displayRandomImage(image);
                 })
                 .catch((error) => {
+                  showError(error.message);
                   console.error("Error fetching random image:", error);
                 });
             } else {
@@ -77,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         })
         .catch((error) => {
+          showError(error.message);
           console.error("Error:", error);
         });
     }
@@ -84,8 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const randomImageBtn = document.getElementById("randomImageBtn");
   randomImageBtn.addEventListener("click", () => {
-    const countryInput = document.getElementById("countryInput").value;
-    const countryNameToUse = countryInput || detectedCountryName;
+    const countryNameToUse = countryInput.value || detectedCountryName;
     console.log("Country name for random image: " + countryNameToUse);
 
     if (countryNameToUse) {
@@ -94,14 +106,15 @@ document.addEventListener("DOMContentLoaded", () => {
           displayRandomImage(image);
         })
         .catch((error) => {
+          showError(error.message);
           console.error("Error fetching random image:", error);
         });
     } else {
+      showError(
+        "Please enter a country name or allow geolocation to detect your country."
+      );
       console.error(
         "No country input provided and no detected country name available."
-      );
-      alert(
-        "Please enter a country name or allow geolocation to detect your country."
       );
     }
   });
@@ -134,7 +147,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return fetch(url)
       .then((response) => {
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          showError("Country name not found");
+          throw new Error(`Country '${country}' not found.`);
         }
         return response.json();
       })
@@ -157,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
       countryItem.textContent = `${country.name.common}, ${country.region}`;
       countryItem.className = "dropdown-item";
       countryItem.onclick = () => {
-        document.getElementById("countryInput").value = country.name.common;
+        countryInput.value = country.name.common;
         countryDropdown.style.display = "none";
 
         displayCountryData(country);
@@ -172,6 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
             displayRandomImage(image);
           })
           .catch((error) => {
+            showError(error.message);
             console.error("Error fetching random image:", error);
           });
       };
@@ -299,4 +314,28 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
   }
+
+  // Function to show error messages
+  function showError(message) {
+    const messageElement = document.getElementById("message");
+    messageElement.className = "message error";
+    messageElement.textContent = message;
+    messageElement.style.display = "block";
+  }
+
+  // Function to clear error messages
+  function clearMessage() {
+    const messageElement = document.getElementById("message");
+    messageElement.style.display = "none";
+  }
+
+  // Event listener to close the dropdown if clicked outside
+  document.addEventListener("click", (event) => {
+    if (
+      !countryDropdown.contains(event.target) &&
+      event.target.id !== "countryInput"
+    ) {
+      countryDropdown.style.display = "none";
+    }
+  });
 });
