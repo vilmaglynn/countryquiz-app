@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const countryCoat = document.getElementById("countryCoat");
 
     const countryName = countryData.name.common;
-    countryNameDisplay.innerHTML = `<img src="./images/earth-icon.svg" alt="earth map" height="90px"> ${countryName}`;
+    countryNameDisplay.innerHTML = `<img src="/images/earth-icon.svg" alt="earth map" height="90px"> ${countryName}`;
 
     countryStats.innerHTML = "";
     countryStats.innerHTML += `<p><b>Capital City: </b>${
