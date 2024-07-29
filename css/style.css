@@ -13,7 +13,7 @@
 }
 .fa-earth-americas {
   font-size: 30px;
-  color: #184f7a;
+  color: #024287;
   padding: 5px;
   background-color: #b6d8f1;
   border-radius: 100%;
@@ -185,6 +185,10 @@
     grid-template-columns: 1fr; /* Change to a single column layout */
   }
 
+  .main-container h1 {
+    font-size: 2em;
+  }
+
   .info-container {
     margin-bottom: 20px; /* Add some space between items in the column */
   }
@@ -194,5 +198,8 @@
 @media (min-width: 769px) and (max-width: 1024px) {
   .grid-container {
     grid-template-columns: repeat(2, 1fr); /* Change to two columns */
+  }
+  .main-container h1 {
+    font-size: 2em;
   }
 }

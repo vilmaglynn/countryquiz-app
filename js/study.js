@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
     countryStats.innerHTML += `<p><b>Currencies:</b> ${Object.values(
       countryData.currencies
     )
-      .map((currency) => currency.name)
+      .map((currency) => `${currency.name} (${currency.symbol})`)
       .join(", ")}</p>`;
 
     countryFlag.src = countryData.flags.svg;

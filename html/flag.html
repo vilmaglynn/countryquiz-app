@@ -33,7 +33,7 @@
 						<a class="nav-link" href="../index.html">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link " aria-current="page" href="../html/study.html">World Study</a>
+						<a class="nav-link" aria-current="page" href="../html/study.html">World Study</a>
 					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
@@ -51,23 +51,32 @@
 	</nav>
 	<!-- end navbar -->
 
-
 	<div class="main-container">
 		<h1>Guess the country flag!</h1>
-		<div>timer= 1:40s</div>
-		<button>Play</button>
-		<h2>
-			France
-		</h2>
+		<div class="gridContainer">
+			<div id="result">
+
+			</div>
+			<div>
+
+				<h2 id="countryName">France</h2>
+			</div>
+			<div>
+				<button id="buttonPlay">Play Game</button>
+				<p id="timer">Timer: 30s</p>
+				<p id="score">8/10 correct!</p>
+			</div>
+
+		</div>
+
 		<div class="flagsContainer">
-			<div><img src="https://restcountries.com/v3.1/name/honduras[0]/flags/svg" id="countryFlag"
-					class="mainImages" alt="Country Flag"></div>
-			<div><img id="countryFlag" class="mainImages" alt="Country Flag"></div>
-			<div><img id="countryFlag" class="mainImages" alt="Country Flag"></div>
+			<div><img src="https://flagcdn.com/fr.svg" id="flag1" class="flagImage" alt="Country Flag"></div>
+			<div><img src="https://flagcdn.com/lu.svg" id="flag2" class="flagImage" alt="Country Flag"></div>
+			<div><img src="https://flagcdn.com/nl.svg" id="flag3" class="flagImage" alt="Country Flag"></div>
 		</div>
 	</div>
-
-
+	<audio id="correctSound" src="../sounds/correct.mp3"></audio>
+	<audio id="wrongSound" src="../sounds/incorrect.mp3"></audio>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

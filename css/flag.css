@@ -1,6 +1,115 @@
+/* Container for the flags */
 .flagsContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px; /* Space between the grid items */
+  margin: 30px;
+}
+.fa-square-check {
+  font-size: 120px;
+  color: green;
+}
+
+.fa-square-xmark {
+  font-size: 120px;
+  color: rgb(194, 1, 1);
+}
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  gap: 10px; /* Space between the grid items */
+  margin: 20px;
+}
+
+/* Main container styling */
+.main-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
+  text-align: center;
+  background-color: rgb(250, 250, 250);
+  margin: 30px auto;
+}
+
+#countryName {
+  font-size: 5em;
+  font-family: "Rowdies", sans-serif;
+}
+
+.main-container h1 {
+  background-color: #d8edfe;
+}
+
+.main-container p {
+  font-family: "Rowdies", sans-serif;
+  font-size: 1.5em;
+}
+/* Basic button styling */
+#buttonPlay {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  background-color: #007bff;
+  background-color: #024287;
+
+  color: white;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Button hover effect */
+#buttonPlay:hover {
+  background-color: #01264d;
+  transform: scale(1.05);
+}
+
+/* Button focus state */
+#buttonPlay:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Light blue shadow */
+}
+
+/* Flag image styling */
+.flagImage {
+  width: 100%; /* Full width of the container */
+  height: 200px; /* Maintain aspect ratio */
+
+  object-fit: cover; /* Ensure image covers the area while maintaining aspect ratio */
+  border: 2px solid rgb(133, 132, 132);
+}
+
+/* Responsive styling for smaller screens */
+@media (max-width: 768px) {
+  .flagsContainer {
+    grid-template-columns: repeat(3, 1fr); /* Maintain 3 columns on tablets */
+    gap: 5px; /* Reduce the gap between items */
+  }
+
+  .flagImage {
+    height: 100px; /* Reduce image height for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .flagsContainer {
+    grid-template-columns: repeat(
+      3,
+      1fr
+    ); /* Maintain 3 columns on small screens */
+    gap: 5px; /* Reduce the gap between items */
+  }
+
+  .flagImage {
+    height: 80px; /* Further reduce image height for very small screens */
+  }
+
+  #buttonPlay {
+    width: 100%; /* Full width button on small screens */
+  }
 }
