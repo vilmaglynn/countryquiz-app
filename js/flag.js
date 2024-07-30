@@ -1,34 +1,32 @@
-let displayedCountryName = ""; // Global variable to store the displayed country name
+document.addEventListener("DOMContentLoaded", () => {
+  playGame();
+});
 
 function playGame() {
-  let buttonPlay = document.getElementById("buttonPlay");
+  const buttonPlay = document.getElementById("buttonPlay");
   buttonPlay.addEventListener("click", fetchAndDisplayCountries);
 }
 
 // Fetch data from the REST Countries API
-function fetchCountries() {
+async function fetchCountries() {
   const url = "https://restcountries.com/v3.1/all";
 
-  return fetch(url)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok " + response.statusText);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      // Filter data to include only independent countries
-      const independentCountries = data.filter(
-        (country) => country.independent
-      );
-      return independentCountries;
-    });
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Network response was not ok: ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data.filter((country) => country.independent);
+  } catch (error) {
+    console.error("There was a problem with the fetch operation:", error);
+    throw error;
+  }
 }
 
 // Function to get a specified number of random countries from the data
 function getRandomCountries(data, num) {
-  let shuffled = data.sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, num);
+  return shuffleArray(data).slice(0, num);
 }
 
 // Function to shuffle an array
@@ -42,49 +40,40 @@ function shuffleArray(array) {
 
 // Function to display the flags and set up event listeners
 function displayFlags(countries) {
+  const flagElements = [
+    document.getElementById("flag1"),
+    document.getElementById("flag2"),
+    document.getElementById("flag3")
+  ];
+
   const shuffledCountries = shuffleArray(countries);
 
-  document.getElementById("flag1").src = shuffledCountries[0].flags.svg;
-  document.getElementById("flag2").src = shuffledCountries[1].flags.svg;
-  document.getElementById("flag3").src = shuffledCountries[2].flags.svg;
+  flagElements.forEach((flagElement, index) => {
+    flagElement.src = shuffledCountries[index].flags.svg;
+    flagElement.onclick = () =>
+      flagClicked(
+        shuffledCountries[index].name.common,
+        shuffledCountries[randomIndex].name.common
+      );
+  });
 
   const randomIndex = Math.floor(Math.random() * 3);
-  displayedCountryName = shuffledCountries[randomIndex].name.common; // Set the global variable
-  document.getElementById("countryName").textContent = displayedCountryName;
-
-  document
-    .getElementById("flag1")
-    .addEventListener("click", () =>
-      flagClicked(shuffledCountries[0].name.common)
-    );
-  document
-    .getElementById("flag2")
-    .addEventListener("click", () =>
-      flagClicked(shuffledCountries[1].name.common)
-    );
-  document
-    .getElementById("flag3")
-    .addEventListener("click", () =>
-      flagClicked(shuffledCountries[2].name.common)
-    );
+  document.getElementById("countryName").textContent =
+    shuffledCountries[randomIndex].name.common;
 }
 
 // Function to handle flag click
-function flagClicked(countryName) {
+function flagClicked(clickedCountryName, correctCountryName) {
   const resultElement = document.getElementById("result");
   const correctSound = document.getElementById("correctSound");
   const wrongSound = document.getElementById("wrongSound");
 
-  if (countryName === displayedCountryName) {
+  if (clickedCountryName === correctCountryName) {
     resultElement.innerHTML = `<i class="fa-solid fa-square-check correct"></i>`;
-    correctSound
-      .play()
-      .catch((error) => console.error("Error playing correct sound:", error)); // Play the correct sound
+    playSound(correctSound);
   } else {
     resultElement.innerHTML = `<i class="fa-solid fa-square-xmark wrong"></i>`;
-    wrongSound
-      .play()
-      .catch((error) => console.error("Error playing wrong sound:", error)); // Play the wrong sound
+    playSound(wrongSound);
   }
 
   // Wait for 2 seconds before fetching and displaying new countries
@@ -94,17 +83,22 @@ function flagClicked(countryName) {
   }, 2000);
 }
 
-// Main function to fetch and display three random independent countries
-function fetchAndDisplayCountries() {
-  fetchCountries()
-    .then((independentCountries) => {
-      const countries = getRandomCountries(independentCountries, 3);
-      displayFlags(countries);
-    })
-    .catch((error) => {
-      console.error("There was a problem with the fetch operation:", error);
-    });
+function playSound(soundElement) {
+  soundElement.play().catch((error) => {
+    console.error("Error playing sound:", error);
+  });
 }
 
-// Initialize the game
-playGame();
+// Main function to fetch and display three random independent countries
+async function fetchAndDisplayCountries() {
+  try {
+    const independentCountries = await fetchCountries();
+    const countries = getRandomCountries(independentCountries, 3);
+    displayFlags(countries);
+  } catch (error) {
+    console.error(
+      "There was a problem with the fetch and display operation:",
+      error
+    );
+  }
+}
