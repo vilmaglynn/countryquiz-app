@@ -11,9 +11,6 @@ function startTimer() {
   const timerDisplay = document.getElementById("timerDisplay");
   let timeRemaining = 30; // Time in seconds
 
-  // Update the timer display
-  timerDisplay.textContent = `Time Remaining: ${timeRemaining}`;
-
   // Clear any existing intervals
   clearInterval(timerInterval);
 
@@ -22,7 +19,7 @@ function startTimer() {
     timeRemaining--;
 
     // Update the timer display
-    timerDisplay.textContent = `Time Remaining: ${timeRemaining}`;
+    timerDisplay.textContent = `Timer: ${timeRemaining}s`;
 
     // Check if the timer has reached zero
     if (timeRemaining <= 0) {
