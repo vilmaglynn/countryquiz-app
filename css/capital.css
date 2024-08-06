@@ -8,7 +8,7 @@
 }
 
 /* Container for the flags */
-.flagsContainer {
+.capitalContainer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px; /* Space between the grid items */
@@ -16,7 +16,7 @@
 }
 
 /* Ensure grid items have a fixed height and align content */
-.flagsContainer > div {
+.capitalContainer > div {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -101,19 +101,19 @@
   box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Light blue shadow */
 }
 
-.flagImage:hover {
-  box-shadow: 0 0 10px #01264d;
-  transform: scale(1.03);
-  cursor: pointer;
-}
-
-/* Flag image styling */
-.flagImage {
-  width: 100%; /* Full width of the container */
-  height: 200px; /* Maintain fixed height */
+/* Capital image styling */
+.capitalImage {
+  width: 350px; /* Full width of the container */
+  height: 100%; /* Maintain fixed height */
   transition: transform 0.3s;
   object-fit: cover; /* Ensure image covers the area while maintaining aspect ratio */
   border: 2px solid rgb(133, 132, 132);
+}
+
+.capitalImage:hover {
+  box-shadow: 0 0 10px #01264d;
+  transform: scale(1.03);
+  cursor: pointer;
 }
 
 .game-over {
@@ -128,25 +128,37 @@
   border-radius: 10px;
 }
 
-/*==================================================*/
+.capital-text {
+  color: rgb(22, 22, 22);
+  font-family: "Rowdies", sans-serif;
+  font-size: 2.5em; /* Adjust the font size as needed */
+  padding: 10px; /* Padding around the text */
+  text-align: center; /* Center align the text */
+  transition: color 0.3s; /* Smooth transition for color changes */
+  text-shadow: 2px 2px 0px #ffffff, /* Right and down */ -2px 2px 0px #fff,
+    /* Left and down */ 2px -2px 0px #fff, /* Right and up */ -2px -2px 0px #fff; /* Left and up */
+}
+
+/*==============================*/
 /* Responsive styling for smaller screens */
 @media (max-width: 1024px) {
-  .flagsContainer {
-    grid-template-columns: repeat(3, 1fr); /* Maintain 3 columns on tablets */
+  .capitalContainer {
+    grid-template-columns: repeat(3, 1fr); /* Maintain 3 columns */
     gap: 5px; /* Reduce the gap between items */
     margin: 10px; /* Reduce margin for smaller screens */
   }
 
-  .flagsContainer > div {
-    height: 100px; /* Adjust height for smaller screens */
+  .capitalContainer > div {
+    height: 150px; /* Adjust height for smaller screens */
   }
 
-  .flagImage {
+  .capitalImage {
     height: 100%; /* Ensure flag images fit within the fixed height */
+    width: 150px;
   }
 
   #countryName {
-    font-size: 2.5em;
+    font-size: 3em;
   }
 
   .game-over {
@@ -164,21 +176,19 @@
 }
 
 @media (max-width: 480px) {
-  .flagsContainer {
-    grid-template-columns: repeat(
-      3,
-      1fr
-    ); /* Maintain 3 columns on small screens */
+  .capitalContainer {
+    grid-template-columns: repeat(3, 1fr); /* Maintain 3 columns */
     gap: 5px; /* Reduce the gap between items */
     margin: 5px; /* Reduce margin for very small screens */
   }
 
-  .flagsContainer > div {
-    height: 80px; /* Further reduce height for very small screens */
+  .capitalContainer > div {
+    height: 100px; /* Further reduce height for very small screens */
   }
 
-  .flagImage {
+  .capitalImage {
     height: 100%; /* Ensure flag images fit within the fixed height */
+    width: 100px;
   }
 
   #countryName {
@@ -191,7 +201,7 @@
 
   #buttonPlay {
     width: 100%; /* Full width button on small screens */
-    font-size: 0.5em; /* Adjust button text size */
+    font-size: 0.8em; /* Adjust button text size */
     padding: 10px;
   }
 
