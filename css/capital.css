@@ -139,6 +139,16 @@
     /* Left and down */ 2px -2px 0px #fff, /* Right and up */ -2px -2px 0px #fff; /* Left and up */
 }
 
+#capital1 {
+  background-color: aquamarine;
+}
+#capital2 {
+  background-color: rgb(255, 127, 221);
+}
+#capital3 {
+  background-color: rgb(246, 255, 127);
+}
+
 /*==============================*/
 /* Responsive styling for smaller screens */
 @media (max-width: 1024px) {
