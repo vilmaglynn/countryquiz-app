@@ -9,7 +9,7 @@ let correctAnswerCounter = 0; // Global counter for correct answers
 // Timer to the game
 function startTimer() {
   const timerDisplay = document.getElementById("timerDisplay");
-  let timeRemaining = 30; // Time in seconds
+  let timeRemaining = 40; // Time in seconds
 
   // Clear any existing intervals
   clearInterval(timerInterval);
@@ -106,11 +106,6 @@ function displayCapitals(countries) {
   });
 
   displayCounter++; // Increment the display counter
-
-  // Check if the display counter has reached 10
-  if (displayCounter === 11) {
-    endGame();
-  }
 }
 
 // Function to handle capital click
@@ -131,13 +126,16 @@ function capitalClicked(clickedCapitalName, correctCapitalName) {
 
   score.textContent = `${correctAnswerCounter} / ${displayCounter}`;
 
-  // Wait for 1 second before fetching and displaying new countries if the game is not over
-  setTimeout(() => {
-    resultElement.innerHTML = ""; // Clear the result icon
-    if (displayCounter < 11) {
+  // Check if the display counter has reached 10
+  if (displayCounter >= 10) {
+    endGame();
+  } else {
+    // Wait for 1 second before fetching and displaying new countries if the game is not over
+    setTimeout(() => {
+      resultElement.innerHTML = ""; // Clear the result icon
       fetchAndDisplayCountries();
-    }
-  }, 1000);
+    }, 1000);
+  }
 }
 
 function playSound(soundElement) {

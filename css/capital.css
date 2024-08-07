@@ -183,6 +183,13 @@
   .fa-square-xmark {
     font-size: 80px;
   }
+
+  .capital-text {
+    font-size: 1.5em; /* Adjust the font size as needed */
+    text-shadow: 2px 2px 0px #ffffff, /* Right and down */ -2px 2px 0px #fff,
+      /* Left and down */ 2px -2px 0px #fff,
+      /* Right and up */ -2px -2px 0px #fff; /* Left and up */
+  }
 }
 
 @media (max-width: 480px) {
@@ -222,5 +229,12 @@
   .fa-square-check,
   .fa-square-xmark {
     font-size: 50px;
+  }
+
+  .capital-text {
+    font-size: 1em; /* Adjust the font size as needed */
+    text-shadow: 2px 2px 0px #ffffff, /* Right and down */ -2px 2px 0px #fff,
+      /* Left and down */ 2px -2px 0px #fff,
+      /* Right and up */ -2px -2px 0px #fff; /* Left and up */
   }
 }
