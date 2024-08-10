@@ -7,24 +7,41 @@
   padding: 0;
 }
 
-/* Container for the flags */
-.capitalContainer {
+/* Main container styling */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: rgb(250, 250, 250);
+  margin: 30px auto;
+  padding: 20px;
+  max-width: 90%; /* Ensuring it doesn't exceed the screen width */
+  flex-wrap: nowrap;
+}
+
+.main-container h1 {
+  background-color: #d8edfe;
+  width: 100%;
+}
+
+.main-container p {
+  font-family: "Rowdies", sans-serif;
+  font-size: 2.5em;
+}
+
+.gridContainer {
+  background-color: #d8edfe;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px; /* Space between the grid items */
-  margin: 20px;
+  gap: 5px; /* Space between the grid items */
+  margin: 10px;
+  padding: 5px;
+  text-align: center;
+  width: 100%;
 }
 
-/* Ensure grid items have a fixed height and align content */
-.capitalContainer > div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px; /* Set a fixed height for grid items */
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-}
-
+/* results area */
 .fa-square-check,
 .fa-square-xmark {
   font-size: 120px;
@@ -38,38 +55,10 @@
   color: rgb(194, 1, 1);
 }
 
-.gridContainer {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 5px; /* Space between the grid items */
-  margin: 10px;
-  padding: 5px;
-}
-
-/* Main container styling */
-.main-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  background-color: rgb(250, 250, 250);
-  margin: 30px auto;
-  padding: 20px;
-  max-width: 90%; /* Ensuring it doesn't exceed the screen width */
-}
-
 #countryName {
   font-size: 5em;
   font-family: "Rowdies", sans-serif;
-}
-
-.main-container h1 {
-  background-color: #d8edfe;
-}
-
-.main-container p {
-  font-family: "Rowdies", sans-serif;
-  font-size: 2.5em;
+  color: #0056b3;
 }
 
 /* Basic button styling */
@@ -101,6 +90,36 @@
   box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Light blue shadow */
 }
 
+.game-over {
+  color: rgb(45, 166, 18); /* Change to your desired color */
+  font-size: 4em; /* Adjust the size as needed */
+  font-weight: bold; /* Make it bold */
+  text-align: center; /* Center the text */
+  margin-top: 10px; /* Add some space at the top */
+  font-family: "Rowdies", sans-serif;
+  z-index: 1000;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+/* Container for the flags */
+.capitalContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px; /* Space between the grid items */
+  margin: 20px;
+}
+
+/* Ensure grid items have a fixed height and align content */
+.capitalContainer > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px; /* Set a fixed height for grid items */
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+}
+
 /* Capital image styling */
 .capitalImage {
   width: 350px; /* Full width of the container */
@@ -114,18 +133,6 @@
   box-shadow: 0 0 10px #01264d;
   transform: scale(1.03);
   cursor: pointer;
-}
-
-.game-over {
-  color: red; /* Change to your desired color */
-  font-size: 4em; /* Adjust the size as needed */
-  font-weight: bold; /* Make it bold */
-  text-align: center; /* Center the text */
-  margin-top: 10px; /* Add some space at the top */
-  font-family: "Rowdies", sans-serif;
-  z-index: 1000;
-  padding: 5px;
-  border-radius: 10px;
 }
 
 .capital-text {

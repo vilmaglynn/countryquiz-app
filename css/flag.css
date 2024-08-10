@@ -39,11 +39,13 @@
 }
 
 .gridContainer {
+  background-color: #d8edfe;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 5px; /* Space between the grid items */
   margin: 10px;
   padding: 5px;
+  width: 100%;
 }
 
 /* Main container styling */
@@ -61,10 +63,12 @@
 #countryName {
   font-size: 5em;
   font-family: "Rowdies", sans-serif;
+  color: #0056b3;
 }
 
 .main-container h1 {
   background-color: #d8edfe;
+  width: 100%;
 }
 
 .main-container p {
@@ -117,7 +121,7 @@
 }
 
 .game-over {
-  color: red; /* Change to your desired color */
+  color: rgb(45, 166, 18); /* Change to your desired color */
   font-size: 4em; /* Adjust the size as needed */
   font-weight: bold; /* Make it bold */
   text-align: center; /* Center the text */

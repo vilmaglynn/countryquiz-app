@@ -1,0 +1,166 @@
+/* Search input */
+.studySearch-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  position: relative;
+  flex-direction: column;
+}
+
+/* Study page */
+/* General styles for the main container */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: rgb(250, 250, 250);
+  width: 80%;
+  margin: 30px auto;
+}
+
+.main-container h1 {
+  padding: 10px;
+  width: 100%;
+  border-radius: 5px;
+  font-family: "Rowdies", sans-serif;
+  font-size: 3em;
+  margin-top: 20px;
+  color: #0056b3;
+}
+
+/* Grid container styles for larger screens */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px; /* Space between the grid items */
+  margin: 20px;
+  width: 80%;
+  margin: 30px auto;
+}
+.infoLabel {
+  border-bottom: 1px solid rgb(215, 214, 214);
+  padding: 10px;
+  width: 100%;
+  align-self: flex-start;
+}
+
+.countryStatsLabel {
+  font-weight: bold !important;
+}
+
+/* Individual grid items */
+.info-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  align-content: center;
+  border: 3px solid rgb(223, 222, 222);
+  background-color: #ffffff;
+  padding: 10px;
+}
+
+/* Ensure images are contained within their grid item and maintain aspect ratio */
+.mainImages {
+  max-width: 100%;
+  height: auto;
+  width: auto;
+  border: 2px solid rgb(133, 132, 132);
+}
+
+.country-image-container {
+  padding: 10px;
+  width: 80%;
+  margin: 30px auto;
+  border: 3px solid rgb(223, 222, 222);
+  background-color: #ffffff;
+}
+.map-container {
+  padding: 10px;
+  width: 80%;
+  margin: 30px auto;
+  border: 3px solid rgb(223, 222, 222);
+  background-color: #ffffff;
+}
+
+#map {
+  margin: 30px auto;
+  height: 450px;
+  width: 80%;
+}
+
+#randomImage {
+  width: 80%;
+  margin: 30px;
+}
+
+/* Dropdown menu */
+#countryDropdown {
+  width: 100%; /* Remove fixed width for better centering */
+  min-width: 300px; /* Ensure minimum width */
+  max-width: 500px; /* Maximum width */
+  position: absolute;
+  top: 100%;
+  left: 50%; /* Start positioning from the center */
+  transform: translateX(-50%); /* Center horizontally */
+  z-index: 1000;
+  display: none; /* Initially hidden */
+  background-color: white;
+  border: 1px solid #b9b8b8;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-height: 100px;
+  overflow-y: auto; /* Scroll if too many items */
+}
+
+.dropdown-item {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+
+.message {
+  display: none;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #f8f8f8;
+  color: #333;
+}
+.message.error {
+  background-color: #fbf2f2;
+  color: #f44336;
+}
+
+/* Responsive styles */
+
+/* For screens less than or equal to 768px wide */
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr; /* Change to a single column layout */
+  }
+
+  .main-container h1 {
+    font-size: 2em;
+  }
+
+  .info-container {
+    margin-bottom: 20px; /* Add some space between items in the column */
+  }
+}
+
+/* For screens between 769px and 1024px wide */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr); /* Change to two columns */
+  }
+  .main-container h1 {
+    font-size: 2em;
+  }
+}
