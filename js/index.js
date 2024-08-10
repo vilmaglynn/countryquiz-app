@@ -11,10 +11,10 @@ var selectedLayer = null; // Variable to store the currently selected country la
 var marker = null; // Variable to store the marker
 
 // Create an audio element for the click sound
-var clickSound = new Audio("../sounds/click.wav"); // Ensure the path is correct
+var clickSound = new Audio("sounds/click.wav"); // Ensure the path is correct
 
 // Fetch and add GeoJSON data to the map
-fetch("../vscode/custom.geo.json")
+fetch(".vscode/custom.geo.json")
   .then((response) => response.json())
   .then((data) => {
     L.geoJson(data, {
