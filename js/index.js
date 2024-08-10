@@ -14,7 +14,7 @@ var marker = null; // Variable to store the marker
 var clickSound = new Audio("sounds/click.wav"); // Ensure the path is correct
 
 // Fetch and add GeoJSON data to the map
-fetch(".vscode/custom.geo.json")
+fetch("data/custom.geo.json")
   .then((response) => response.json())
   .then((data) => {
     L.geoJson(data, {
