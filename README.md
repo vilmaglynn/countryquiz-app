@@ -2,6 +2,8 @@
 
 CountryQuiz-App is a web-based application designed to challenge users' knowledge of countries around the world. The app features interactive quizzes, including a map-based quiz where users can identify countries by clicking on them. The app is built using JavaScript, HTML, and CSS, and leverages various libraries for enhanced functionality.
 
+![countryquiz](./images/countryquiz.png)
+
 https://vilmaglynn.github.io/countryquiz-app/
 
 ## Features
@@ -20,20 +22,6 @@ GeoJSON: Geographic data representation.
 Bootstrap 5: Responsive design and components.
 OpenStreetMap: Map tiles used in the interactive quiz.
 GitHub Pages: Hosting platform for the app.
-Installation
-
-To run the CountryQuiz-App locally:
-
-Clone the repository:
-bash
-Copy code
-git clone https://github.com/yourusername/countryquiz-app.git
-Navigate to the project directory:
-bash
-Copy code
-cd countryquiz-app
-Open home.html in your web browser:
-You can simply double-click the home.html file or open it using a local server for better experience.
 
 ## Usage
 
